@@ -79,8 +79,15 @@ hasil agregat perolehan performa dari seluruh anggota tim.
 
 ## Implementasi
 
+### Struktur File
+
+```tree
+.
+```
+
 ## Pranala
 
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [flask](https://flask.palletsprojects.com/en/stable/)
 - [stravalib](https://github.com/stravalib/stravalib)
+- [Strava Developer](https://developers.strava.com/)
