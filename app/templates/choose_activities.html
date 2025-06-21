@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Pilih Aktivitas{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Pilih Aktivitas dari Strava</h2>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nama</th>
+            <th>Jarak (km)</th>
+            <th>Durasi (menit)</th>
+            <th>Tipe</th>
+            <th>Aksi</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for act in activities %}
+            <tr>
+                <td>{{ act.name }}</td>
+                <td>{{ (act.distance / 1000) | round(2) }}</td>
+                <td>{{ act.start_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ act.type }}</td>
+                <td>
+                    {% if act.id|string in saved_ids %}
+                    ✅ Sudah disimpan
+                    {% else %}
+                    <form method="POST" action="{{ url_for('activities.submit_activity') }}">
+                        <input type="hidden" name="strava_id" value="{{ act.id }}">
+                        <button type="submit">Submit</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+</table>
+
+<a class="btn btn-primary" href="{{ url_for('activities.my_activities') }}" role="button">My Activities</a>
+
+{% endblock %}

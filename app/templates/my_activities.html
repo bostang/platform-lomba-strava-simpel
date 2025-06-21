@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Pilih Aktivitas{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Aktivitas Saya</h2>
+{% if activities %}
+<table border="1" cellpadding="6">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Jarak (km)</th>
+      <th>Durasi (menit)</th>
+      <th>Tipe</th>
+      <th>Tanggal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for act in activities %}
+    <tr>
+      <td>{{ act.name }}</td>
+      <td>{{ (act.distance / 1000) | round(2) }}</td>
+      <td>{{ (act.moving_time / 60) | round(1) }}</td>
+      <td>{{ act.type }}</td>
+      <td>{{ act.start_date.strftime('%Y-%m-%d %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+  <p>Belum ada aktivitas yang disubmit.</p>
+{% endif %}
+
+<a class="btn btn-primary" href="{{ url_for('activities.choose_activities') }}" role="button">Submit Activities</a>
+
+{% endblock %}

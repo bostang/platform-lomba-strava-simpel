@@ -51,18 +51,18 @@ Tabel penghubung untuk menyatakan relasi _many-to-many_ antara `users` dan `team
 
 Aktivitas dari Strava (run, bike). Berisi detail informasi performa seperti jarak, waktu aktivitas, pace, dan lain-lain.
 
-| Kolom                | Tipe Data     | Keterangan                              |
-| ------------------   | -----------   | --------------------------------------- |
-| `id`                 | `BIGINT`      | ID dari Strava (unik global)            |
-| `user_id`            | FK → `users`  | Pemilik aktivitas                       |
-| `type`               | `VARCHAR`     | Jenis aktivitas (Run, Ride, Swim, Hike) |
-| `distance_km`        | `NUMERIC`     | Jarak dalam kilometer                   |
-| `elapsed_time`       | `INT` (detik) | Waktu bergerak                          |
-| `pace`               | `NUMERIC`     | Pace (jika applicable, misal untuk Run) |
-| `start_date`         | `TIMESTAMP`   | Tanggal dan waktu mulai aktivitas       |
-| `submit_date`        | `TIMESTAMP`   | Waktu aktivitas diambil                 |
-| `is_valid`           | `BOOLEAN`     | Untuk keperluan validasi manual/admin   |
-| `activity_url`       | `VARCHAR`     | Link menuju aktivitas stravanya         |
+| Kolom          | Tipe Data  | Keterangan                  |
+| -------------- | ---------- | --------------------------- |
+| `id`           | UUID       | Primary Key                 |
+| `strava_id`    | BIGINT     | ID aktivitas dari Strava    |
+| `user_id`      | FK → users | Pemilik aktivitas           |
+| `name`         | VARCHAR    | Nama aktivitas (judul)      |
+| `distance`     | FLOAT      | Dalam meter                 |
+| `moving_time`  | INTEGER    | Dalam detik                 |
+| `elapsed_time` | INTEGER    | Dalam detik                 |
+| `type`         | VARCHAR    | Jenis: Run, Ride, Swim, dll |
+| `start_date`   | TIMESTAMP  | Tanggal aktivitas           |
+| `created_at`   | TIMESTAMP  | Waktu data ini disimpan     |
 
 ##### `team_scores`
 

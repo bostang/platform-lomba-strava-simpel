@@ -1,3 +1,5 @@
+# app/views/auth.py
+
 from app.extensions import db
 from app.models import User
 
@@ -66,23 +68,44 @@ def authorize():
 
     db.session.commit()
 
-    session['user_id'] = user.id
-    return f"Login berhasil! Halo, {user.full_name} (ID lokal: {user.id})"
+    # ✅ Login user sekarang
+    from flask_login import login_user
+    login_user(user)
+
+    return redirect(url_for('activities.choose_activities'))
 
 
-# @auth_bp.route('/authorize')
-# def authorize():
-#     code = request.args.get('code')
-#     if not code:
-#         return "Authorization failed", 400
+@auth_bp.route("/callback")
+def callback():
+    code = request.args.get("code")
+    if not code:
+        return "Authorization failed", 400
 
-#     client = Client()
-#     token_response = client.exchange_code_for_token(
-#         client_id=os.getenv('STRAVA_CLIENT_ID'),
-#         client_secret=os.getenv('STRAVA_CLIENT_SECRET'),
-#         code=code
-#     )
+    client = Client()
+    token_response = client.exchange_code_for_token(
+        client_id=os.getenv("STRAVA_CLIENT_ID"),
+        client_secret=os.getenv("STRAVA_CLIENT_SECRET"),
+        code=code
+    )
 
-#     session['access_token'] = token_response['access_token']
-#     athlete = client.get_athlete()
-#     return f"Login berhasil! Halo, {athlete.firstname} {athlete.lastname} (Strava ID: {athlete.id})"
+    athlete = client.get_athlete()
+    strava_id = athlete.id
+
+    user = User.query.filter_by(strava_id=strava_id).first()
+    if not user:
+        user = User(
+            strava_id=strava_id,
+            username=athlete.username,
+            full_name=athlete.firstname + " " + athlete.lastname,
+        )
+        db.session.add(user)
+
+    user.access_token = token_response["access_token"]
+    user.refresh_token = token_response["refresh_token"]
+    user.token_expires_at = datetime.utcfromtimestamp(token_response["expires_at"])
+
+    db.session.commit()
+
+    login_user(user)  # <== INI PENTING
+
+    return redirect(url_for("activities.choose_activities"))

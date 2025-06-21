@@ -1,8 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head><title>Login with Strava</title></head>
-<body>
-    <h1>Login</h1>
-    <a href="{{ url_for('auth.login') }}">Login with Strava</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Pilih Aktivitas{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Platform Lomba Strava Sederhana</h2>
+<a class="btn btn-primary" href="{{ url_for('auth.login') }}" role="button">Login</a>
+
+{% endblock %}
