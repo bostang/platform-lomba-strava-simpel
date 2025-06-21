@@ -2,6 +2,16 @@
 
 Sebuah platform (web) lomba sederhana yang berinteraksi dengan ekosistem Strava (via API) berbasis bahasa pemrograman Python
 
+## Demo
+
+### Authentication
+
+![demo-autentikasi](./img/authentication_demo.gif)
+
+### Pemakaian App
+
+![demo-pemakaian-app](./img/simple_demo.gif)
+
 ## Desain
 
 ### Desain Database

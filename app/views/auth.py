@@ -80,7 +80,7 @@ def authorize():
     from flask_login import login_user
     login_user(user)
 
-    return redirect(url_for('activities.choose_activities'))
+    return redirect(url_for('home.index'))
 
 
 @auth_bp.route("/callback")
@@ -116,4 +116,4 @@ def callback():
 
     login_user(user)  # <== INI PENTING
 
-    return redirect(url_for("activities.choose_activities"))
+    return redirect(url_for("home.index"))

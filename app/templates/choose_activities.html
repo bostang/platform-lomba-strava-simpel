@@ -20,7 +20,7 @@
                 <td>{{ act.name }}</td>
                 <td>{{ (act.distance / 1000) | round(2) }}</td>
                 <td>{{ act.start_date.strftime('%Y-%m-%d %H:%M') }}</td>
-                <td>{{ act.type }}</td>
+                <td>{{ act.type.root }}</td>
                 <td>
                     {% if act.id|string in saved_ids %}
                     ✅ Sudah disimpan
