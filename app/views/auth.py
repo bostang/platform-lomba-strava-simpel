@@ -7,13 +7,15 @@ from datetime import datetime
 
 from flask import Blueprint, redirect, request, session, url_for, render_template
 from stravalib.client import Client
+from flask_login import logout_user
+
 import os
 
 auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/')
 def login_page():
-    return render_template('login.html')
+    return render_template('index.html')
 
 @auth_bp.route('/login')
 def login():
@@ -25,6 +27,12 @@ def login():
         scope=['read', 'activity:read']
     )
     return redirect(auth_url)
+
+@auth_bp.route('/logout')
+def logout():
+    logout_user()
+    session.clear()
+    return redirect(url_for('auth.login_page'))
 
 @auth_bp.route('/authorize')
 def authorize():

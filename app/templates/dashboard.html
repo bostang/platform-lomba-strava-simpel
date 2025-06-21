@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Dashboard</h2>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Ringkasan Aktivitas</h4>
+      <table class="table table-bordered">
+        <thead><tr><th>Tipe</th><th>Jarak (km)</th><th>Waktu (menit)</th><th>Jumlah</th></tr></thead>
+        <tbody>
+          {% for row in summary %}
+          <tr>
+            <td>{{ row.type }}</td>
+            <td>{{ (row.total_distance / 1000) | round(2) }}</td>
+            <td>{{ (row.total_time / 60) | round(1) }}</td>
+            <td>{{ row.activity_count }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <h4>Progress Bulanan</h4>
+      <div class="progress">
+        <div class="progress-bar" style="width: {{ (progress_km / monthly_target_km * 100) | round(2) }}%;">
+          {{ progress_km }} km dari {{ monthly_target_km }} km
+        </div>
+      </div>
+
+      <h4 class="mt-4">Leaderboard</h4>
+      <ol>
+        {% for row in leaderboard %}
+        <li>{{ row.full_name }} - {{ (row.total_distance / 1000) | round(2) }} km</li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}

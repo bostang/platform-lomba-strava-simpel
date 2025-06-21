@@ -21,15 +21,24 @@ def create_app():
     migrate.init_app(app, db)
 
     login_manager.init_app(app)  # inisiasi login manager
-    login_manager.login_view = "auth.login"  # sesuaikan dengan endpoint login kamu
+    login_manager.login_view = "auth.login"  # supaya redirect ke /login saat belum login
+    
 
-    # auth.py
+    # registrasi blueprint auth.py
     from app.views.auth import auth_bp
     app.register_blueprint(auth_bp)
 
     # activities.py
     from app.views.activities import activities_bp
     app.register_blueprint(activities_bp)
+
+    # dashboard.py
+    from app.views.dashboard import dashboard_bp
+    app.register_blueprint(dashboard_bp)
+
+    # home.py
+    from app.views.home import home_bp  # pastikan import ini ada
+    app.register_blueprint(home_bp)
 
     return app
 

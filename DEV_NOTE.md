@@ -139,14 +139,29 @@ solusi :
 return current_app.extensions['migrate'].db.engine
 ```
 
-- Tambahkan ini di `app/__init__.py `
+- Tambahkan ini di `app/__init__.py`
 
 ```python
 from app import models  # pastikan model terbaca oleh Flask-Migrate
 ```
 
-maka jalankan lagi : 
+maka jalankan lagi :
+
 ```bash
 flask db migrate -m "create users table"
 flask db upgrade
+```
+
+### Query Manual Database
+
+Apabila ada pesan error terkait dgn format data di tabel, lakukan:
+
+```sql
+strava_db=# SET client_encoding TO 'UTF8';
+```
+
+Cara hapus seluruh isi tabel:
+
+```sql
+TRUNCATE [nama_tabel];
 ```
