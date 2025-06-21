@@ -99,17 +99,17 @@ echo "sesuatu" | md5sum
 
 ### Inisialisasi Database
 
-```bash
-flask db init
-flask db migrate -m "create users table"
-flask db upgrade
-```
-
 Ekstensi Flask-Migrate memungkinkan kita untuk melakukan migrasi database secara terprogram.
 
 `flask db init` : inisialisasi sebuah direktori migrasi (biasanya bernama migrations/) di dalam root proyek.
 `flask db migrate -m "create users table"` : Membuat skrip migrasi baru berdasarkan perbedaan antara skema database saat ini (atau skema kosong jika ini migrasi pertama) dan definisi model SQLAlchemy.
 `flask db upgrade` :  Menjalankan migrasi yang tertunda (yang telah dibuat dengan `flask db migrate`) untuk memperbarui skema database ke versi terbaru.
+
+```bash
+flask db init
+flask db migrate -m "create users table"
+flask db upgrade
+```
 
 output:
 
@@ -127,4 +127,26 @@ WARNI [py.warnings] C:\Users\ASUS\Documents\Projects\platform-lomba-strava-simpe
 
 INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
 INFO  [alembic.runtime.migration] Will assume transactional DDL.
+```
+
+solusi :
+
+- Edit file: `migrations/env.py`
+
+```python
+# return current_app.extensions['migrate'].db.get_engine()          # GANTI INI (versi usang)
+# menjadi:
+return current_app.extensions['migrate'].db.engine
+```
+
+- Tambahkan ini di `app/__init__.py `
+
+```python
+from app import models  # pastikan model terbaca oleh Flask-Migrate
+```
+
+maka jalankan lagi : 
+```bash
+flask db migrate -m "create users table"
+flask db upgrade
 ```
