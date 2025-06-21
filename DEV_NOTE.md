@@ -85,7 +85,7 @@ git checkout dev       # Pindah ke dev
 pip install Flask stravalib python-dotenv
 pip freeze > requirements.txt # maka segala library & dependencynya akan masuk ke requirements.txt
 
-pip install flask_sqlalchemy flask-migrate
+pip install sqlalchemy psycopg2-binary flask-sqlalchemy flask-migrate
 pip freeze > requirements.txt
 ```
 
@@ -95,4 +95,58 @@ Cara mudah :
 
 ```bash
 echo "sesuatu" | md5sum
+```
+
+### Inisialisasi Database
+
+Ekstensi Flask-Migrate memungkinkan kita untuk melakukan migrasi database secara terprogram.
+
+`flask db init` : inisialisasi sebuah direktori migrasi (biasanya bernama migrations/) di dalam root proyek.
+`flask db migrate -m "create users table"` : Membuat skrip migrasi baru berdasarkan perbedaan antara skema database saat ini (atau skema kosong jika ini migrasi pertama) dan definisi model SQLAlchemy.
+`flask db upgrade` :  Menjalankan migrasi yang tertunda (yang telah dibuat dengan `flask db migrate`) untuk memperbarui skema database ke versi terbaru.
+
+```bash
+flask db init
+flask db migrate -m "create users table"
+flask db upgrade
+```
+
+output:
+
+```log
+(venv) PS C:\Users\ASUS\Documents\Projects\platform-lomba-strava-simpel> flask db migrate -m "create users table"
+WARNI [py.warnings] C:\Users\ASUS\Documents\Projects\platform-lomba-strava-simpel\migrations\env.py:21: DeprecationWarning: 'get_engine' is deprecated and will be removed in Flask-SQLAlchemy 3.2. Use 'engine' or 'engines[key]' instead. If you're using Flask-Migrate or Alembic, you'll need to update your 'env.py' file.
+  return current_app.extensions['migrate'].db.get_engine()
+
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+INFO  [alembic.env] No changes in schema detected.
+(venv) PS C:\Users\ASUS\Documents\Projects\platform-lomba-strava-simpel> flask db upgrade
+WARNI [py.warnings] C:\Users\ASUS\Documents\Projects\platform-lomba-strava-simpel\migrations\env.py:21: DeprecationWarning: 'get_engine' is deprecated and will be removed in Flask-SQLAlchemy 3.2. Use 'engine' or 'engines[key]' instead. If you're using Flask-Migrate or Alembic, you'll need to update your 'env.py' file.
+  return current_app.extensions['migrate'].db.get_engine()
+
+INFO  [alembic.runtime.migration] Context impl PostgresqlImpl.
+INFO  [alembic.runtime.migration] Will assume transactional DDL.
+```
+
+solusi :
+
+- Edit file: `migrations/env.py`
+
+```python
+# return current_app.extensions['migrate'].db.get_engine()          # GANTI INI (versi usang)
+# menjadi:
+return current_app.extensions['migrate'].db.engine
+```
+
+- Tambahkan ini di `app/__init__.py `
+
+```python
+from app import models  # pastikan model terbaca oleh Flask-Migrate
+```
+
+maka jalankan lagi : 
+```bash
+flask db migrate -m "create users table"
+flask db upgrade
 ```
