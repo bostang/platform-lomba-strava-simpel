@@ -6,7 +6,9 @@ Sebuah platform (web) lomba sederhana yang berinteraksi dengan ekosistem Strava 
 
 ### Desain Database
 
-![Skema Database](./img/db_schema.png)
+<!-- ![Skema Database](./img/db_schema.png) -->
+
+![Skema Database](./img/db_schema_initial.png)
 
 #### Uraian Tabel
 
@@ -25,7 +27,7 @@ Individu peserta yang login dengan akun Strava.
 | `token_expires_at`   | `TIMESTAMP`  | Token expiry time             |
 | `created_at`         | `TIMESTAMP`  | Timestamp saat user terdaftar |
 
-##### `teams`
+<!-- ##### `teams`
 
 tim tempat peserta bergabung pada lomba.
 
@@ -34,9 +36,9 @@ tim tempat peserta bergabung pada lomba.
 | `id`          | `UUID`       | Primary Key                      |
 | `name`        | `VARCHAR`    | Nama tim                         |
 | `code`        | `VARCHAR`    | Kode unik  untuk join ke tim     |
-| `created_at`  | `TIMESTAMP`  | Tanggal dibuat                   |
+| `created_at`  | `TIMESTAMP`  | Tanggal dibuat                   | -->
 
-##### `team_members`
+<!-- ##### `team_members`
 
 Tabel penghubung untuk menyatakan relasi _many-to-many_ antara `users` dan `teams`.
 
@@ -45,7 +47,7 @@ Tabel penghubung untuk menyatakan relasi _many-to-many_ antara `users` dan `team
 | `id`         | `INT`        | Primary Key            |
 | `user_id`    | FK → `users` | Peserta                |
 | `team_id`    | FK → `teams` | Tim                    |
-| `joined_at`  | `TIMESTAMP`  | Waktu bergabung ke tim |
+| `joined_at`  | `TIMESTAMP`  | Waktu bergabung ke tim | -->
 
 ##### `activities`
 
@@ -64,7 +66,7 @@ Aktivitas dari Strava (run, bike). Berisi detail informasi performa seperti jara
 | `start_date`   | TIMESTAMP  | Tanggal aktivitas           |
 | `created_at`   | TIMESTAMP  | Waktu data ini disimpan     |
 
-##### `team_scores`
+<!-- ##### `team_scores`
 
 hasil agregat perolehan performa dari seluruh anggota tim.
 
@@ -75,7 +77,7 @@ hasil agregat perolehan performa dari seluruh anggota tim.
 | `total_distance` | `NUMERIC`           | Total jarak                         |
 | `elapsed_time`   | `NUMERIC`           | Total waktu aktivitas               |
 | `avg_pace`       | `NUMERIC`           | Rata-rata pace tim untuk total 20km |
-| `submitted_at`   | `TIMESTAMP`         | Terakhir kali diperbarui            |
+| `submitted_at`   | `TIMESTAMP`         | Terakhir kali diperbarui            | -->
 
 ## Implementasi
 
@@ -83,6 +85,70 @@ hasil agregat perolehan performa dari seluruh anggota tim.
 
 ```tree
 .
+├── DEV_NOTE.md
+├── LICENSE
+├── README.md
+├── app
+│   ├── __init__.py
+│   ├── config.py
+│   ├── extensions.py
+│   ├── models.py
+│   ├── templates
+│   │   ├── base.html
+│   │   ├── choose_activities.html
+│   │   ├── dashboard.html
+│   │   ├── index.html
+│   │   ├── login.html
+│   │   └── my_activities.html
+│   └── views
+│       ├── __init__.py
+│       ├── activities.py
+│       ├── auth.py
+│       ├── dashboard.py
+│       └── home.py
+├── img
+│   └── db_schema.png
+├── migrations
+│   ├── README
+│   ├── alembic.ini
+│   ├── env.py
+│   ├── script.py.mako
+│   └── versions
+│       ├── 5a2797440a47_create_activities_table.py
+│       └── 967c1aaee5bf_create_users_table.py
+├── requirements.txt
+├── .env
+└── run.py
+```
+
+## Cara Menjalankan
+
+**Langkah 1** : Aktifkan virtual environment python dan install library
+
+> lihat `DEV_NOTE.md`
+
+**Langkah 2** : Siapkan `.env` di root proyek
+
+```conf
+###### STRAVA ######
+# Didapat dari https://www.strava.com/settings/api
+# paduan : https://developers.strava.com/docs/getting-started/
+STRAVA_CLIENT_ID=XXXXXX
+STRAVA_CLIENT_SECRET=XXXXXXXXXXX
+STRAVA_REDIRECT_URI=http://localhost:5000/authorize
+    # contoh redirect nanti : http://localhost:5000/authorize?state=&code=XXXX&scope=read,activity:read
+    
+SECRET_KEY=a18642c4852a9cd51f4b8ed72455027b
+    # saya generate dengan : echo "platform-lomba-strava-simpel" | md5sum
+
+###### POSTGRESQL ######
+DATABASE_URL=postgresql://postgres:password@localhost:5432/strava_db
+```
+
+**Langkah 3** : Jalankan aplikasi
+
+```bash
+python run.py
 ```
 
 ## Pranala
